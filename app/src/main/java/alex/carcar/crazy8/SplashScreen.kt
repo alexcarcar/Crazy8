@@ -1,33 +1,45 @@
 package alex.carcar.crazy8
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 
+
 class SplashScreen(context: Context?) : View(context) {
-    private val paint: Paint
-    private var cx: Int
-    private var cy: Int
-    private val radius: Float
-    private val TAG = getContext().javaClass.name
+    private val paint: Paint = Paint()
+    private val titleG: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.splash_graphic)
+    private var cx: Int = 0
+    private var cy: Int = 0
+    private val radius: Float = 50f
+    private val tag: String = getContext().javaClass.name
+
+    private var scrW: Int = 0
+    private var scrH : Int = 0
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        this.scrW = w
+        this.scrH = h
+        this.cx = ((w - this.radius) / 2).toInt()
+        this.cy = h/6
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        cx = cx + 50
-        cy = cy + 25
+        cx += 50
+        cy += 25
         canvas.drawCircle(cx.toFloat(), cy.toFloat(), radius, paint)
+        val titleGLeftPos = (scrW - titleG.width)/2
+        canvas.drawBitmap(titleG, titleGLeftPos.toFloat(), 100f, null)
     }
 
     override fun onTouchEvent(evt: MotionEvent): Boolean {
-        val action = evt.action
-        when (action) {
-            MotionEvent.ACTION_DOWN -> Log.d(TAG, "Down")
-            MotionEvent.ACTION_UP -> Log.d(TAG, "Up")
+        when (evt.action) {
+            MotionEvent.ACTION_DOWN -> Log.d(tag, "Down")
+            MotionEvent.ACTION_UP -> Log.d(tag, "Up")
             MotionEvent.ACTION_MOVE -> {
-                Log.d(TAG, "Move")
+                Log.d(tag, "Move")
                 cx = evt.x.toInt()
                 cy = evt.y.toInt()
             }
@@ -37,11 +49,7 @@ class SplashScreen(context: Context?) : View(context) {
     }
 
     init {
-        paint = Paint()
         paint.color = Color.GREEN
         paint.isAntiAlias = true
-        cx = 200
-        cy = 200
-        radius = 50f
     }
 }
