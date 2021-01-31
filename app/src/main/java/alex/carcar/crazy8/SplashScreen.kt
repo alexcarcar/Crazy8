@@ -1,13 +1,14 @@
 package alex.carcar.crazy8
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 
-
 class SplashScreen(context: Context?) : View(context) {
+    private var ctx: Context
     private val paint: Paint = Paint()
     private val titleG: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.splash_graphic)
     private val playBtnUp: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.btn_up)
@@ -67,6 +68,8 @@ class SplashScreen(context: Context?) : View(context) {
                 if (playBtnPressed) {
                     // Launch main game screen
                     Log.d(tag, "Launch main game screen")
+                    val gameIntent = Intent(ctx, CrazyEight::class.java)
+                    ctx.startActivity(gameIntent)
                 }
                 playBtnPressed = false
             }
@@ -83,5 +86,6 @@ class SplashScreen(context: Context?) : View(context) {
     init {
         paint.color = Color.GREEN
         paint.isAntiAlias = true
+        ctx = context!!
     }
 }
